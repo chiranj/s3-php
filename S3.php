@@ -57,7 +57,7 @@ class S3
 	 * @acess public
 	 * @static
 	 */
-	public static $endpoint = 's3.amazonaws.com';
+	public static $endpoint = '10.212.16.2:8082';
 
 	/**
 	 * Proxy information
@@ -166,7 +166,7 @@ class S3
 	* @param string $endpoint Amazon URI
 	* @return void
 	*/
-	public function __construct($accessKey = null, $secretKey = null, $useSSL = false, $endpoint = 's3.amazonaws.com')
+	public function __construct($accessKey = null, $secretKey = null, $useSSL = false, $endpoint = '10.212.16.2:8082')
 	{
 		if ($accessKey !== null && $secretKey !== null)
 			self::setAuth($accessKey, $secretKey);
@@ -1148,7 +1148,7 @@ class S3
 		$expires = self::__getTime() + $lifetime;
 		$uri = str_replace(array('%2F', '%2B'), array('/', '+'), rawurlencode($uri));
 		return sprintf(($https ? 'https' : 'http').'://%s/%s?AWSAccessKeyId=%s&Expires=%u&Signature=%s',
-		// $hostBucket ? $bucket : $bucket.'.s3.amazonaws.com', $uri, self::$__accessKey, $expires,
+		// $hostBucket ? $bucket : $bucket.'.10.212.16.2:8082', $uri, self::$__accessKey, $expires,
 		$hostBucket ? $bucket : self::$endpoint.'/'.$bucket, $uri, self::$__accessKey, $expires,
 		urlencode(self::__getHash("GET\n\n\n{$expires}\n/{$bucket}/{$uri}")));
 	}
@@ -1284,7 +1284,7 @@ class S3
 		self::$useSSL = true; // CloudFront requires SSL
 		$rest = new S3Request('POST', '', '2010-11-01/distribution', 'cloudfront.amazonaws.com');
 		$rest->data = self::__getCloudFrontDistributionConfigXML(
-			$bucket.'.s3.amazonaws.com',
+			$bucket.'.10.212.16.2:8082',
 			$enabled,
 			(string)$comment,
 			(string)microtime(true),
@@ -1991,7 +1991,7 @@ final class S3Request
 	* @param string $endpoint AWS endpoint URI
 	* @return mixed
 	*/
-	function __construct($verb, $bucket = '', $uri = '', $endpoint = 's3.amazonaws.com')
+	function __construct($verb, $bucket = '', $uri = '', $endpoint = '10.212.16.2:8082')
 	{
 		
 		$this->endpoint = $endpoint;
